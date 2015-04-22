@@ -1,8 +1,8 @@
 #include "TransformFrame.h"
 namespace Etoile
 {
-	TransformFrame::TransformFrame(QObject *parent)
-		: QObject(parent)
+	TransformFrame::TransformFrame(TransformFrame* parent)
+		: m_referenceFrame(parent)
 	{
 
 	}

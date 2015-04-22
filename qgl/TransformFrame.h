@@ -12,8 +12,9 @@ namespace Etoile
 		Q_OBJECT
 
 	public:
-		TransformFrame(QObject *parent);
+		TransformFrame(TransformFrame* parent = NULL);
 		~TransformFrame();
+		void setReferenceFrame(TransformFrame* f){ m_referenceFrame = f; }
 		void setPosition(const Vec3f& position);
 		void setOrientation(const Quaternionf& orientation);
 		void setTranslation(const Vec3f& t){ m_t = t; Q_EMIT modified(); }
