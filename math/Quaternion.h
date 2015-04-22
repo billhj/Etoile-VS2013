@@ -372,16 +372,6 @@ namespace Etoile
 		}
 
 
-
-		/*! @name Associated matrix */
-		//@{
-		const Matrix4f matrix() const
-		{
-			static Matrix4f m;
-			getMatrix(m);
-			return m;
-		}
-
 		void getMatrix(Matrix4f&  m) const
 		{
 			const float  q00 = 2.0 * q[0] * q[0];
