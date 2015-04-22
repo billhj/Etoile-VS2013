@@ -7,30 +7,16 @@
 */
 
 #pragma once
-#include "Vec2.h"
-#include "Vec3.h"
-#include "Vec4.h"
-#include "VecN.h"
-#include <vector>
-
+#include <Eigen/Dense>
 namespace Etoile
 {
-	class VecConverter
-	{
-	public:
-		static Vec4f convertFromDoubleToFloat(const Vec4d& v)
-		{
-			return Vec4f((float)v[0], (float)v[1], (float)v[2], (float)v[3]);
-		}
+	typedef Eigen::Vector2d Vec2d;
+	typedef Eigen::Vector3d Vec3d;
+	typedef Eigen::Vector4d Vec4d;
+	typedef Eigen::VectorXd VecXd;
 
-		static std::vector<Vec4f> convertFromDoubleToFloat(const std::vector<Vec4d>& v)
-		{
-			std::vector<Vec4f> vr;
-			for(unsigned int i = 0; i < v.size(); ++i)
-			{
-				vr.push_back(convertFromDoubleToFloat(v[i]));
-			}
-			return vr;
-		}
-	};
+	typedef Eigen::Vector2f Vec2f;
+	typedef Eigen::Vector3f Vec3f;
+	typedef Eigen::Vector4f Vec4f;
+	typedef Eigen::VectorXf VecXf;
 }

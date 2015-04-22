@@ -7,58 +7,57 @@
 */
 
 #pragma once
-#include "Vec3.h"
+#include "Vectors.h"
 #include "Quaternion.h"
 
 namespace Etoile
 {
-	template<class T>
-	class ExponentialMap
+	class ExponentialMapf
 	{
 	public:
-		ExponentialMap()
+		ExponentialMapf()
 		{
 
 		}
 
-		ExponentialMap(Vec3<T> axis, T angle)
+		ExponentialMapf(Vec3f axis, float angle)
 		{
 			_axis = axis.normalized();
 			_angle = angle;
 		}
 
-		ExponentialMap(Quaternion value)
+		ExponentialMapf(Quaternionf value)
 		{
 			_axis = value.axis().normalized();
 			_angle = value.angle();
 		}
 
-		Quaternion getQuaternion()
+		Quaternionf getQuaternionf()
 		{
-			Quaternion q;
+			Quaternionf q;
 			q.setAxisAngle(_axis, _angle);
 			return q;
 		}
 
-		Vec3<T> operator *(Vec3<T> v)
+		Vec3f operator *(Vec3f v)
 		{
 			return rotate(v);
 		}
 
-		ExponentialMap inverse() const
+		ExponentialMapf inverse() const
 		{
-			return ExponentialMap(_axis, -_angle);
+			return ExponentialMapf(_axis, -_angle);
 		}
 
-		Vec3<T> rotate(const Vec3<T> & v) const
+		Vec3f rotate(const Vec3f & v) const
 		{
-			Vec3<T> r = v * cos(_angle)
+			Vec3f r = v * cos(_angle)
 				+ _axis.cross3(v) * sin(_angle)
-				+ _axis * _axis.dot3(v) * (1 - cos(_angle));
+				+ _axis * _axis.dot(v) * (1 - cos(_angle));
 			return r;
 		}
 
-		Vec3<T> inverseRotate(const Vec3<T> & v) const
+		Vec3f inverseRotate(const Vec3f & v) const
 		{
 			return inverse().rotate(v);
 		}
@@ -68,8 +67,8 @@ namespace Etoile
 			_angle = -_angle;
 		}
 	private:
-		Vec3<T> _axis;
-		T _angle;
+		Vec3f _axis;
+		float _angle;
 
 	};
 }
