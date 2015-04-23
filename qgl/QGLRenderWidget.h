@@ -5,6 +5,7 @@
 #include <QTime>
 #include <QTimer>
 #include "ui_QGLRenderWidget.h"
+#include "Camera.h"
 
 namespace Etoile
 {
@@ -25,6 +26,7 @@ namespace Etoile
 		bool isFullScreen() const { return m_fullScreen; }
 		bool animationIsStarted() const { return m_animationStarted; }
 		int animationPeriod() const { return m_animationPeriod; }
+		Camera* camera(){ return m_camera; }
 	protected:
 		void initializeGL();
 		void paintGL();
@@ -83,6 +85,7 @@ namespace Etoile
 		bool m_animationStarted; // animation mode started
 		int m_animationPeriod;
 		int m_animationTimerId;
+		Camera* m_camera;
 	};
 }
 #endif // QGLRENDERWIDGET_H

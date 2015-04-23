@@ -117,4 +117,44 @@ namespace Etoile
 	{
 		return rotation().rotate(src) + translation();
 	}
+
+	Vec3f TransformFrame::transformOf(const Vec3f& src) const
+	{
+		if (referenceFrame())
+			return localTransformOf(referenceFrame()->transformOf(src));
+		else
+			return localTransformOf(src);
+	}
+
+	/*! Returns the world transform of the vector whose coordinates in the Frame coordinate
+	system is \p src (converts vectors from Frame to world).
+	transformOf() performs the inverse transformation. Use inverseCoordinatesOf() to transform 3D
+	coordinates instead of 3D vectors. */
+	Vec3f TransformFrame::inverseTransformOf(const Vec3f& src) const
+	{
+		const TransformFrame* fr = this;
+		Vec3f res = src;
+		while (fr != NULL)
+		{
+			res = fr->localInverseTransformOf(res);
+			fr = fr->referenceFrame();
+		}
+		return res;
+	}
+
+	/*! Returns the Frame transform of a vector \p src defined in the referenceFrame() coordinate system
+	(converts vectors from referenceFrame() to Frame).
+	localInverseTransformOf() performs the inverse transformation. See also localCoordinatesOf(). */
+	Vec3f TransformFrame::localTransformOf(const Vec3f& src) const
+	{
+		return rotation().inverseRotate(src);
+	}
+
+	/*! Returns the referenceFrame() transform of a vector \p src defined in the Frame coordinate
+	system (converts vectors from Frame to referenceFrame()).
+	localTransformOf() performs the inverse transformation. See also localInverseCoordinatesOf(). */
+	Vec3f TransformFrame::localInverseTransformOf(const Vec3f& src) const
+	{
+		return rotation().rotate(src);
+	}
 }

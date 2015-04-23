@@ -8,7 +8,7 @@
 
 #pragma once
 #include <QObject>
-#include "TransformFrame.h"
+#include "ManipulatedCameraTransformFrame.h"
 
 namespace Etoile
 {
@@ -22,16 +22,19 @@ namespace Etoile
 		float m_fieldOfView; // in radians
 		float m_nearPlane;
 		float m_farPlane;
+		Vec3f m_sceneCenter;
+		//qreal m_sceneRadius; // OpenGL units
 
 		Matrix4f m_modelviewMatrix;
 		Matrix4f m_projectionMatrix;;
 
 		CameraType m_type;
-		TransformFrame m_ref;
+		ManipulatedCameraTransformFrame* m_frame;
 	public:
 		Camera(const Vec3f& position, const Quaternionf& orientation, TransformFrame* parent = NULL);
 		Camera(const Vec3f& direction, const Vec3f& up, const Vec3f& position, TransformFrame* parent = NULL);
 		Camera(TransformFrame* parent = NULL);
+
 		void reset();
 		CameraType type();
 		void setType(CameraType type);
@@ -53,6 +56,7 @@ namespace Etoile
 		Vec3f getUpVector() const;
 		void setViewDirection(const Vec3f& direction);
 		Vec3f getViewDirection() const;
+		void setPivotPoint(const Vec3f& point);
 
 		void setPerspective(int width = 800, int height = 600, float near = 0.1f, float far = 10000.0f, float fieldOfView =  M_PI / 4.0);
 		void setOrthogonal(int width = 800, int height = 600, float near = 0.1f, float far = 10000.0f);
@@ -67,6 +71,24 @@ namespace Etoile
 		void computeProjectionMatrix();
 		void computeModelViewMatrix();
 
+		Vec3f position() const { return m_frame->position(); }
+		Vec3f upVector() const
+		{
+			return m_frame->inverseTransformOf(Vec3f(0.0, 1.0, 0.0));
+		}
+		Vec3f viewDirection() const { return m_frame->inverseTransformOf(Vec3f(0.0, 0.0, -1.0)); }
+		Vec3f rightVector() const
+		{
+			return m_frame->inverseTransformOf(Vec3f(1.0, 0.0, 0.0));
+		}
+		Quaternionf orientation() const { return m_frame->orientation(); }
+		void setPosition(const Vec3f& pos) { m_frame->setPosition(pos); }
+
+		Vec3f cameraCoordinatesOf(const Vec3f& src) const { return m_frame->coordinatesOf(src); }
+		Vec3f worldCoordinatesOf(const Vec3f& src) const { return m_frame->inverseCoordinatesOf(src); }
+
+		Vec3f pivotPoint() const { return m_frame->pivotPoint(); }
+		ManipulatedCameraTransformFrame* frame(){ return m_frame; }
 		public Q_SLOTS:
 		void updateMatrix();
 

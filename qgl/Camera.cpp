@@ -23,21 +23,30 @@ namespace Etoile
 
 	Camera::Camera(const Vec3f& position, const Quaternionf& orientation, TransformFrame* parent)
 	{
-		m_ref.setReferenceFrame(parent);
-		m_ref.setPosition(position);
-		m_ref.setOrientation(orientation);
+		m_frame = new ManipulatedCameraTransformFrame(this, parent);
+		//m_frame->setReferenceFrame(parent);
+		m_frame->setPosition(position);
+		m_frame->setOrientation(orientation);
+		if (position.x() != 0 && position.y() != 0 && position.z() != 0)
+			setPivotPoint(Vec3f());
 	}
 
 	Camera::Camera(const Vec3f& direction, const Vec3f& up, const Vec3f& position, TransformFrame* parent)
 	{
-		m_ref.setReferenceFrame(parent);
-		m_ref.setPosition(position);
+		m_frame = new ManipulatedCameraTransformFrame(this, parent);
+		//m_frame->setReferenceFrame(parent);
+		m_frame->setPosition(position);
 		this->setupCameraOrientation(direction, up);
+		//if (position.x() != 0 && position.y() != 0 && position.z() != 0)
+		setPivotPoint(direction * 2);
 	}
 
-	Camera::Camera(TransformFrame* parent = NULL)
+	Camera::Camera(TransformFrame* parent)
 	{
-		m_ref.setReferenceFrame(parent);
+		m_frame = new ManipulatedCameraTransformFrame(this, parent);
+		m_frame->setPosition(Vec3f(0,0,-2));
+		setPivotPoint(Vec3f());
+		//m_frame->setReferenceFrame(parent);
 		reset();
 	}
 
@@ -66,38 +75,44 @@ namespace Etoile
 	int Camera::getHeight() const{ return m_screenHeight; }
 	void Camera::setHeight(int m_screenHeight){ m_screenHeight = m_screenHeight; }
 
+	void Camera::setPivotPoint(const Vec3f& point)
+	{
+		m_frame->setPivotPoint(point);
+		setTarget(point);
+	}
+
 	void Camera::setTarget(const Vec3f& target)
 	{
-		setupCameraOrientation(target - m_ref.position(), getUpVector());
+		setupCameraOrientation(target - m_frame->position(), getUpVector());
 	}
 
 	void Camera::setUpVector(const Vec3f& up)
 	{
 		setupCameraOrientation(getViewDirection(), up);
 	}
-	Vec3f Camera::getUpVector() const{ return m_ref.orientation() * Vec3f(0, 1, 0); }
+	Vec3f Camera::getUpVector() const{ return m_frame->orientation() * Vec3f(0, 1, 0); }
 	void Camera::setViewDirection(const Vec3f& direction)
 	{
 		setupCameraOrientation(direction, getUpVector());
 	}
-	Vec3f Camera::getViewDirection() const{ return m_ref.orientation() * Vec3f(0, 0, -1); }
+	Vec3f Camera::getViewDirection() const{ return m_frame->orientation() * Vec3f(0, 0, -1); }
 
-	void Camera::setPerspective(int width, int height, float near, float far, float fieldOfView)
+	void Camera::setPerspective(int width, int height, float nearP, float farP, float fieldOfView)
 	{
 		this->setWidth(width);
 		this->setHeight(height);
-		this->setZNearPlane(near);
-		this->setZFarPlane(far);
+		this->setZNearPlane(nearP);
+		this->setZFarPlane(farP);
 		this->setFieldOfView(fieldOfView);
 		this->setType(CameraType::PERSPECTIVE);
 		computeProjectionMatrix();
 	}
-	void Camera::setOrthogonal(int width, int height, float near, float far)
+	void Camera::setOrthogonal(int width, int height, float nearP, float farP)
 	{
 		this->setWidth(width);
 		this->setHeight(height);
-		this->setZNearPlane(near);
-		this->setZFarPlane(far);
+		this->setZNearPlane(nearP);
+		this->setZFarPlane(farP);
 		this->setType(CameraType::ORTHOGRAPHIC);
 		computeProjectionMatrix();
 	}
@@ -122,7 +137,7 @@ namespace Etoile
 
 		Quaternionf q;
 		q.setFromRotatedBasis(xAxis, xAxis.cross3(direction), -direction);
-		m_ref.setOrientation(q);
+		m_frame->setOrientation(q);
 	}
 
 	void Camera::computeTransformationMatrix()
@@ -163,9 +178,9 @@ namespace Etoile
 
 	void Camera::computeModelViewMatrix()
 	{
-		const Quaternionf q = m_ref.orientation();
+		const Quaternionf q = m_frame->orientation();
 		q.getInverseMatrix(m_modelviewMatrix);      //inverse matrix for camera that is modelview for obj
-		Vec3f t = q.inverseRotate(m_ref.position());  // distance in project space  
+		Vec3f t = q.inverseRotate(m_frame->position());  // distance in project space  
 		m_modelviewMatrix(0, 3) = -t[0];
 		m_modelviewMatrix(1, 3) = -t[1];
 		m_modelviewMatrix(2, 3) = -t[2];

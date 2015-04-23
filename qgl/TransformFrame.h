@@ -38,6 +38,14 @@ namespace Etoile
 		Vec3f inverseCoordinatesOf(const Vec3f& src) const;
 		Vec3f localCoordinatesOf(const Vec3f& src) const;
 		Vec3f localInverseCoordinatesOf(const Vec3f& src) const;
+
+		/***
+		*** transform in rotation space
+		**/
+		Vec3f transformOf(const Vec3f& src) const;
+		Vec3f inverseTransformOf(const Vec3f& src) const;
+		Vec3f localTransformOf(const Vec3f& src) const;
+		Vec3f localInverseTransformOf(const Vec3f& src) const;
 	Q_SIGNALS:
 		void modified();
 	private:
