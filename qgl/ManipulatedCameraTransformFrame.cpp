@@ -114,13 +114,16 @@ namespace Etoile
 		//const qreal sceneRadius = camera->sceneRadius();
 		if (m_zoomsOnPivotPoint) {
 			Vec3f direction = position() - m_camera->pivotPoint();
+			std::cout << position() << " " << m_camera->pivotPoint()<<std::endl;
 			if (direction.norm() > 0.02  || delta > 0.0)
 				translate(delta * direction);
+			std::cout << delta * direction;
 		}
 		else {
 			const qreal coef = fabs((m_camera->frame()->coordinatesOf(m_camera->pivotPoint())).z());
 			Vec3f trans(0.0, 0.0, -coef * delta);
 			translate(inverseTransformOf(trans));
+			//std::cout << inverseTransformOf(trans) <<"  2";
 		}
 	}
 

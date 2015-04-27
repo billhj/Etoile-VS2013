@@ -8,6 +8,7 @@
 
 #pragma once
 #include <stdio.h>
+#include <iostream>
 #include "Vectors.h"
 #include "Matrices.h"
 
@@ -32,8 +33,8 @@ namespace Etoile
 
 		Quaternionf()
 		{ 
-			q[0]=q[1]=q[2]=0.0;  
-			q[3]=1.0; 
+			q[0]=q[1]=q[2]=0.0f;  
+			q[3]=1.0f; 
 		}
 
 		Quaternionf(const Vec3f& axis, float angle)
@@ -407,6 +408,7 @@ namespace Etoile
 			m(3,1) = 0.0;
 			m(3,2) = 0.0;
 			m(3,3) = 1.0;
+			//cout << m;
 		}
 
 		void getRotationMatrix(Matrix3f&  m) const

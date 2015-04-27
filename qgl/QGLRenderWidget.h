@@ -17,7 +17,6 @@ namespace Etoile
 		QGLRenderWidget(QWidget *parent = 0);
 		~QGLRenderWidget();
 		void defaultSetup();
-		bool displaysInStereo() const { return m_stereo; }
 		QColor backgroundColor() const { return m_backgroundColor; }
 		QColor foregroundColor() const { return m_foregroundColor; }
 		bool FPSIsDisplayed() const { return m_FPSIsDisplayed; }
@@ -42,6 +41,14 @@ namespace Etoile
 		virtual void fastDraw();
 		virtual void postDraw();
 
+
+		virtual void mousePressEvent(QMouseEvent* const event) override;
+		virtual void mouseDoubleClickEvent(QMouseEvent* const event) override;
+		/*! Mouse release event callback method. See mousePressEvent(). */
+		virtual void mouseReleaseEvent(QMouseEvent* const event) override;
+		virtual void mouseMoveEvent(QMouseEvent* const event) override;
+		virtual void wheelEvent(QWheelEvent* const event) override;
+
 		public Q_SLOTS:
 		/*! Sets the backgroundColor() of the viewer and calls \c qglClearColor(). See also
 		setForegroundColor(). */
@@ -51,7 +58,6 @@ namespace Etoile
 
 		void displayFPS();
 		void setFullScreen(bool fullScreen = true);
-		void setStereoDisplay(bool stereo = true);
 		void setAnimationPeriod(int period) { m_animationPeriod = period; }
 		virtual void startAnimation();
 		virtual void stopAnimation();
@@ -71,7 +77,6 @@ namespace Etoile
 	private:
 		Ui::QGLRenderWidget ui;
 		QColor m_backgroundColor, m_foregroundColor;
-		bool m_stereo;
 		bool m_fullScreen;
 		bool m_FPSIsDisplayed;
 		bool m_textIsEnabled;	// drawText() actually draws text or not
@@ -83,7 +88,6 @@ namespace Etoile
 
 		QString m_message;
 		bool m_displayMessage;
-		QTimer m_messageTimer;
 
 		bool m_animationStarted; // animation mode started
 		int m_animationPeriod;

@@ -1,6 +1,7 @@
 #include "QGLRenderWidget.h"
 #include <QTimer>
 #include "Camera.h"
+#include <iostream>
 
 namespace Etoile
 {
@@ -18,15 +19,13 @@ namespace Etoile
 
 	void QGLRenderWidget::defaultSetup(){
 		setFocusPolicy(Qt::StrongFocus);
-
+		m_camera = new Camera();
 
 		m_fpsTime.start();
 		m_fpsCounter = 0;
 		m_f_p_s = 0.0;
 		m_fpsString = tr("%1Hz", "Frames per seconds, in Hertz").arg("?");
 		m_displayMessage = false;
-		connect(&m_messageTimer, SIGNAL(timeout()), SLOT(hideMessage()));
-		m_messageTimer.setSingleShot(true);
 
 		m_fullScreen = false;
 		setFullScreen(false);
@@ -88,7 +87,6 @@ namespace Etoile
 		//{
 			// Clears screen, set model view matrix...
 			preDraw();
-	
 			draw();
 			// Add visual hints: axis, camera, grid...
 			postDraw();
@@ -116,9 +114,9 @@ namespace Etoile
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// GL_PROJECTION matrix
-		loadProjectionMatrix();
+		loadProjectionMatrix(true);
 		// GL_MODELVIEW matrix
-		loadModelViewMatrix();
+		loadModelViewMatrix(true);
 
 		Q_EMIT drawNeeded();
 	}
@@ -165,7 +163,7 @@ namespace Etoile
 		// Reset model view matrix to world coordinates origin
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
-		loadModelViewMatrix();
+		loadModelViewMatrix(true);
 		// TODO restore model loadProjectionMatrixStereo
 
 		// Save OpenGL state
@@ -229,13 +227,18 @@ namespace Etoile
 
 	void QGLRenderWidget::resizeGL(int width, int height)
 	{
-
+		QGLWidget::resizeGL(width, height);
+		glViewport(0, 0, GLint(width), GLint(height));
+		camera()->setWidth(width);
+		camera()->setHeight(height);
 	}
 
 
 	void QGLRenderWidget::displayFPS()
 	{
 		drawText(10, int(1.5*((QApplication::font().pixelSize() > 0) ? QApplication::font().pixelSize() : QApplication::font().pointSize())), m_fpsString);
+
+		//drawText(50, int(1.5*((QApplication::font().pixelSize() > 0) ? QApplication::font().pixelSize() : QApplication::font().pointSize())), QString().setNum(camera()->getZFarPlane()));
 	}
 
 	void QGLRenderWidget::drawText(int x, int y, const QString& text, const QFont& fnt)
@@ -279,5 +282,31 @@ namespace Etoile
 		m_animationStarted = false;
 		if (m_animationTimerId != 0)
 			killTimer(m_animationTimerId);
+	}
+
+
+	void QGLRenderWidget::mousePressEvent(QMouseEvent* const event)
+	{
+		m_camera->frame()->mousePressEvent(event);
+	}
+
+	void QGLRenderWidget::mouseDoubleClickEvent(QMouseEvent* const event)
+	{
+		m_camera->frame()->mouseDoubleClickEvent(event);
+	}
+
+	void QGLRenderWidget::mouseReleaseEvent(QMouseEvent* const event)
+	{
+		m_camera->frame()->mouseReleaseEvent(event);
+	}
+
+	void QGLRenderWidget::mouseMoveEvent(QMouseEvent* const event)
+	{
+		m_camera->frame()->mouseMoveEvent(event);
+	}
+
+	void QGLRenderWidget::wheelEvent(QWheelEvent* const event)
+	{
+		m_camera->frame()->wheelEvent(event);
 	}
 }

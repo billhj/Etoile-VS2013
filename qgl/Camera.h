@@ -22,7 +22,7 @@ namespace Etoile
 		float m_fieldOfView; // in radians
 		float m_nearPlane;
 		float m_farPlane;
-		Vec3f m_sceneCenter;
+		//Vec3f m_sceneCenter;
 		//qreal m_sceneRadius; // OpenGL units
 
 		Matrix4f m_modelviewMatrix;
@@ -34,8 +34,7 @@ namespace Etoile
 		Camera(const Vec3f& position, const Quaternionf& orientation, TransformFrame* parent = NULL);
 		Camera(const Vec3f& direction, const Vec3f& up, const Vec3f& position, TransformFrame* parent = NULL);
 		Camera(TransformFrame* parent = NULL);
-
-		void reset();
+		void resetCamera();
 		CameraType type();
 		void setType(CameraType type);
 		float getAspectRatio() const;
@@ -69,7 +68,6 @@ namespace Etoile
 		void getGLProjectionMatrixf(float* );
 
 		void setupCameraOrientation(const Vec3f& direction, const Vec3f& upVector);
-		void computeTransformationMatrix();
 		void computeProjectionMatrix();
 		void computeModelViewMatrix();
 
@@ -91,8 +89,6 @@ namespace Etoile
 
 		Vec3f pivotPoint() const { return m_frame->pivotPoint(); }
 		ManipulatedCameraTransformFrame* frame(){ return m_frame; }
-		public Q_SLOTS:
-		void updateMatrix();
 
 	};
 

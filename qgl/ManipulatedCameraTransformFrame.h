@@ -21,7 +21,7 @@ namespace Etoile
 		void zoom(qreal delta);
 		bool zoomsOnPivotPoint() const { return m_zoomsOnPivotPoint; }
 		void setZoomsOnPivotPoint(bool enabled) { m_zoomsOnPivotPoint = enabled; }
-	protected:
+	public:
 		virtual void mousePressEvent(QMouseEvent* const event) override;
 		virtual void mouseDoubleClickEvent(QMouseEvent* const event) override;
 		/*! Mouse release event callback method. See mousePressEvent(). */

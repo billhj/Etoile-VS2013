@@ -4,7 +4,6 @@ namespace Etoile
 	TransformFrame::TransformFrame(TransformFrame* parent)
 		: m_referenceFrame(parent)
 	{
-
 	}
 
 	TransformFrame::~TransformFrame()

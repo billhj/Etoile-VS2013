@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "math", "..\..\math\math.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QGLRenderer", "..\..\qgl\QGLRenderer.vcxproj", "{B12702AD-ABFB-343A-A199-8E24837244A3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "..\..\apps\Test\Test.vcxproj", "{165C7C95-4DA0-4D8B-B095-CAB628547D41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -39,8 +41,23 @@ Global
 		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|Win32.Build.0 = Release|Win32
 		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x64.ActiveCfg = Release|x64
 		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x64.Build.0 = Release|x64
+		{165C7C95-4DA0-4D8B-B095-CAB628547D41}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{165C7C95-4DA0-4D8B-B095-CAB628547D41}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{165C7C95-4DA0-4D8B-B095-CAB628547D41}.Debug|Win32.ActiveCfg = Debug|Win32
+		{165C7C95-4DA0-4D8B-B095-CAB628547D41}.Debug|Win32.Build.0 = Debug|Win32
+		{165C7C95-4DA0-4D8B-B095-CAB628547D41}.Debug|x64.ActiveCfg = Debug|x64
+		{165C7C95-4DA0-4D8B-B095-CAB628547D41}.Debug|x64.Build.0 = Debug|x64
+		{165C7C95-4DA0-4D8B-B095-CAB628547D41}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{165C7C95-4DA0-4D8B-B095-CAB628547D41}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{165C7C95-4DA0-4D8B-B095-CAB628547D41}.Release|Win32.ActiveCfg = Release|Win32
+		{165C7C95-4DA0-4D8B-B095-CAB628547D41}.Release|Win32.Build.0 = Release|Win32
+		{165C7C95-4DA0-4D8B-B095-CAB628547D41}.Release|x64.ActiveCfg = Release|x64
+		{165C7C95-4DA0-4D8B-B095-CAB628547D41}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		Qt5Version = msvc2013_64_opengl
 	EndGlobalSection
 EndGlobal

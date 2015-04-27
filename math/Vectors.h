@@ -8,6 +8,7 @@
 
 #pragma once
 #include <Eigen/Dense>
+#include <Eigen/StdVector>
 namespace Etoile
 {
 	typedef Eigen::Vector2d Vec2d;
@@ -20,3 +21,12 @@ namespace Etoile
 	typedef Eigen::Vector4f Vec4f;
 	typedef Eigen::VectorXf VecXf;
 }
+
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Etoile::Vec2d)
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Etoile::Vec3d)
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Etoile::Vec4d)
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Etoile::VecXd)
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Etoile::Vec2f)
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Etoile::Vec3f)
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Etoile::Vec4f)
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Etoile::VecXf)

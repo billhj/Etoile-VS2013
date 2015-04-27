@@ -12,7 +12,7 @@ namespace Etoile
 		~MouseGrabber();
 		void setGrabsMouse(bool grabs) { m_grabsMouse = grabs; }
 		bool grabsMouse() const { return m_grabsMouse; }
-	protected:
+	public:
 		virtual void mousePressEvent(QMouseEvent* const event) = 0;
 		virtual void mouseDoubleClickEvent(QMouseEvent* const event) = 0;
 		/*! Mouse release event callback method. See mousePressEvent(). */

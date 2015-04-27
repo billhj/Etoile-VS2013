@@ -54,7 +54,7 @@ namespace Etoile
 		private Q_SLOTS:
 		void spinUpdate();
 
-	protected:
+	public:
 		virtual void mousePressEvent(QMouseEvent* const event) override;
 		virtual void mouseDoubleClickEvent(QMouseEvent* const event) override;
 		/*! Mouse release event callback method. See mousePressEvent(). */

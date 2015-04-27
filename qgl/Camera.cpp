@@ -23,6 +23,7 @@ namespace Etoile
 
 	Camera::Camera(const Vec3f& position, const Quaternionf& orientation, TransformFrame* parent)
 	{
+		resetCamera();
 		m_frame = new ManipulatedCameraTransformFrame(this, parent);
 		//m_frame->setReferenceFrame(parent);
 		m_frame->setPosition(position);
@@ -33,6 +34,7 @@ namespace Etoile
 
 	Camera::Camera(const Vec3f& direction, const Vec3f& up, const Vec3f& position, TransformFrame* parent)
 	{
+		resetCamera();
 		m_frame = new ManipulatedCameraTransformFrame(this, parent);
 		//m_frame->setReferenceFrame(parent);
 		m_frame->setPosition(position);
@@ -43,14 +45,15 @@ namespace Etoile
 
 	Camera::Camera(TransformFrame* parent)
 	{
+		resetCamera();
 		m_frame = new ManipulatedCameraTransformFrame(this, parent);
 		m_frame->setPosition(Vec3f(0,0,-2));
 		setPivotPoint(Vec3f());
 		//m_frame->setReferenceFrame(parent);
-		reset();
+		
 	}
 
-	void Camera::reset()
+	void Camera::resetCamera()
 	{
 		m_type = PERSPECTIVE;
 		m_fieldOfView = M_PI / 4.0;
@@ -58,6 +61,15 @@ namespace Etoile
 		m_farPlane = 10000.0f;
 		m_screenWidth = 800;
 		m_screenHeight = 600;
+		m_modelviewMatrix << 0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0;
+
+		m_projectionMatrix << 0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0,
+			0, 0, 0, 0;
 	}
 
 	CameraType Camera::type(){ return m_type; }
@@ -83,6 +95,8 @@ namespace Etoile
 
 	void Camera::setTarget(const Vec3f& target)
 	{
+		std::cout << this->pivotPoint() << std::endl;
+		std::cout << this->position() << std::endl;
 		setupCameraOrientation(target - m_frame->position(), getUpVector());
 	}
 
@@ -140,12 +154,6 @@ namespace Etoile
 		m_frame->setOrientation(q);
 	}
 
-	void Camera::computeTransformationMatrix()
-	{
-		computeProjectionMatrix();
-		computeModelViewMatrix();
-	}
-
 	void Camera::computeProjectionMatrix()
 	{
 		switch (m_type)
@@ -185,6 +193,7 @@ namespace Etoile
 		m_modelviewMatrix(1, 3) = -t[1];
 		m_modelviewMatrix(2, 3) = -t[2];
 		m_modelviewMatrix(3, 3) = 1.0;
+		//std::cout << m_modelviewMatrix;
 	}
 
 	void Camera::getGLModelViewMatrixf(float* matrix)
@@ -192,6 +201,7 @@ namespace Etoile
 		for (unsigned int i = 0; i < 4; ++i){
 			for (unsigned int j = 0; j < 4; ++j){
 				matrix[i * 4 + j] = m_modelviewMatrix(j, i);
+				//std::cout << matrix[i * 4 + j];
 			}
 		}
 	}
@@ -205,9 +215,6 @@ namespace Etoile
 		}
 	}
 
-	void Camera::updateMatrix(){
-		computeTransformationMatrix();
-	}
 
 	FrontViewCamera::FrontViewCamera(const Vec3f& position) : Camera(Vec3f(0, 0, -1), Vec3f(0, 1, 0), position)
 	{

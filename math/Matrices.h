@@ -8,6 +8,7 @@
 
 #pragma once
 #include <Eigen/Dense>
+#include <Eigen/StdVector>
 namespace Etoile
 {
 	typedef Eigen::Matrix2d Matrix2d;
@@ -20,3 +21,12 @@ namespace Etoile
 	typedef Eigen::Matrix4f Matrix4f;
 	typedef Eigen::MatrixXf MatrixXf;
 }
+
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Etoile::Matrix2d)
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Etoile::Matrix3d)
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Etoile::Matrix4d)
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Etoile::MatrixXd)
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Etoile::Matrix2f)
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Etoile::Matrix3f)
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Etoile::Matrix4f)
+EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Etoile::MatrixXf)
