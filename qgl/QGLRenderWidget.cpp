@@ -73,26 +73,26 @@ namespace Etoile
 
 	void QGLRenderWidget::paintGL()
 	{
-		if (displaysInStereo())
-		{
-			for (int view = 1; view >= 0; --view)
-			{
-				// Clears screen, set model view matrix with shifted matrix for ith buffer
-				//preDrawStereo(view);
-				
-				draw();
-				postDraw();
-			}
-		}
-		else
-		{
+		//if (displaysInStereo())
+		//{
+		//	for (int view = 1; view >= 0; --view)
+		//	{
+		//		// Clears screen, set model view matrix with shifted matrix for ith buffer
+		//		//preDrawStereo(view);
+		//		
+		//		draw();
+		//		postDraw();
+		//	}
+		//}
+		//else
+		//{
 			// Clears screen, set model view matrix...
 			preDraw();
 	
 			draw();
 			// Add visual hints: axis, camera, grid...
 			postDraw();
-		}
+		//}
 		Q_EMIT drawFinished(true);
 	}
 
