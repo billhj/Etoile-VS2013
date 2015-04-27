@@ -6,7 +6,6 @@
 #include <QTimer>
 #include "ui_QGLRenderWidget.h"
 
-
 namespace Etoile
 {
 	class Camera;
