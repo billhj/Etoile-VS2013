@@ -5,10 +5,11 @@
 #include <QTime>
 #include <QTimer>
 #include "ui_QGLRenderWidget.h"
-#include "Camera.h"
+
 
 namespace Etoile
 {
+	class Camera;
 	class QGLRenderWidget : public QGLWidget
 	{
 		Q_OBJECT
@@ -27,6 +28,10 @@ namespace Etoile
 		bool animationIsStarted() const { return m_animationStarted; }
 		int animationPeriod() const { return m_animationPeriod; }
 		Camera* camera(){ return m_camera; }
+
+
+		void loadProjectionMatrix(bool reset = false);
+		void loadModelViewMatrix(bool reset = false);
 	protected:
 		void initializeGL();
 		void paintGL();
@@ -35,7 +40,6 @@ namespace Etoile
 		virtual void init() = 0;
 		virtual void draw() = 0;
 		virtual void preDraw();
-		virtual void preDrawStereo(bool leftBuffer = true);
 		virtual void fastDraw();
 		virtual void postDraw();
 

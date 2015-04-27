@@ -65,6 +65,8 @@ namespace Etoile
 		Matrix4f getProjectionMatrix() const;
 		Matrix4f getGLModelViewMatrix() const;
 		Matrix4f getGLProjectionMatrix() const;
+		void getGLModelViewMatrixf(float* ) ;
+		void getGLProjectionMatrixf(float* );
 
 		void setupCameraOrientation(const Vec3f& direction, const Vec3f& upVector);
 		void computeTransformationMatrix();

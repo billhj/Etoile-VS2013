@@ -1,5 +1,6 @@
 #include "QGLRenderWidget.h"
 #include <QTimer>
+#include "Camera.h"
 
 namespace Etoile
 {
@@ -77,12 +78,9 @@ namespace Etoile
 			for (int view = 1; view >= 0; --view)
 			{
 				// Clears screen, set model view matrix with shifted matrix for ith buffer
-				preDrawStereo(view);
-				// Used defined method. Default is empty
-				if (camera()->frame()->isManipulated())
-					fastDraw();
-				else
-					draw();
+				//preDrawStereo(view);
+				
+				draw();
 				postDraw();
 			}
 		}
@@ -90,11 +88,8 @@ namespace Etoile
 		{
 			// Clears screen, set model view matrix...
 			preDraw();
-			// Used defined method. Default calls draw()
-			if (camera()->frame()->isManipulated())
-				fastDraw();
-			else
-				draw();
+	
+			draw();
 			// Add visual hints: axis, camera, grid...
 			postDraw();
 		}
@@ -115,15 +110,45 @@ namespace Etoile
 	Emits the drawNeeded() signal once this is done (see the <a href="../examples/callback.html">callback example</a>). */
 	void QGLRenderWidget::preDraw()
 	{
+		
+		
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// GL_PROJECTION matrix
-		camera()->loadProjectionMatrix();
+		loadProjectionMatrix();
 		// GL_MODELVIEW matrix
-		camera()->loadModelViewMatrix();
+		loadModelViewMatrix();
 
 		Q_EMIT drawNeeded();
 	}
+
+	void QGLRenderWidget::loadProjectionMatrix(bool reset)
+	{
+		static float* projectM = new float[16];
+		glMatrixMode(GL_PROJECTION);
+		m_camera->computeProjectionMatrix();
+		m_camera->getGLProjectionMatrixf(projectM);
+		if (reset)
+		{
+				glLoadIdentity();
+		}
+		glMultMatrixf(projectM);
+	}
+
+	void QGLRenderWidget::loadModelViewMatrix(bool reset)
+	{
+		static float* modelVM = new float[16];
+		glMatrixMode(GL_MODELVIEW);
+		m_camera->computeModelViewMatrix();
+		m_camera->getGLModelViewMatrixf(modelVM);
+		if (reset)
+		{
+			glLoadIdentity();
+		}
+		glMultMatrixf(modelVM);
+	}
+
 
 	/*! Called after draw() to draw viewer visual hints.
 
@@ -140,7 +165,7 @@ namespace Etoile
 		// Reset model view matrix to world coordinates origin
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
-		camera()->loadModelViewMatrix();
+		loadModelViewMatrix();
 		// TODO restore model loadProjectionMatrixStereo
 
 		// Save OpenGL state
@@ -188,30 +213,6 @@ namespace Etoile
 		glPopMatrix();
 	}
 
-	/*! Called before draw() (instead of preDraw()) when viewer displaysInStereo().
-
-	Same as preDraw() except that the glDrawBuffer() is set to \c GL_BACK_LEFT or \c GL_BACK_RIGHT
-	depending on \p leftBuffer, and it uses qglviewer::Camera::loadProjectionMatrixStereo() and
-	qglviewer::Camera::loadModelViewMatrixStereo() instead. */
-	void QGLRenderWidget::preDrawStereo(bool leftBuffer)
-	{
-		// Set buffer to draw in
-		// Seems that SGI and Crystal Eyes are not synchronized correctly !
-		// That's why we don't draw in the appropriate buffer...
-		if (!leftBuffer)
-			glDrawBuffer(GL_BACK_LEFT);
-		else
-			glDrawBuffer(GL_BACK_RIGHT);
-
-		// Clear the buffer where we're going to draw
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		// GL_PROJECTION matrix
-		camera()->loadProjectionMatrixStereo(leftBuffer);
-		// GL_MODELVIEW matrix
-		camera()->loadModelViewMatrixStereo(leftBuffer);
-
-		Q_EMIT drawNeeded();
-	}
 
 	/*! Draws a simplified version of the scene to guarantee interactive camera displacements.
 

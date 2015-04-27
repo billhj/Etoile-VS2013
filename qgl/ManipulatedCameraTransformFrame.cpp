@@ -63,7 +63,7 @@ namespace Etoile
 			{
 				case CameraType::PERSPECTIVE:
 					trans *= 2.0 * tan(m_camera->getFieldOfView() / 2.0) *
-						fabs((m_camera->frame()->coordinatesOf(pivotPoint())).z) / m_camera->getHeight();
+						fabs((m_camera->frame()->coordinatesOf(pivotPoint())).z()) / m_camera->getHeight();
 					break;
 				case CameraType::ORTHOGRAPHIC:
 				{
@@ -118,7 +118,7 @@ namespace Etoile
 				translate(delta * direction);
 		}
 		else {
-			const qreal coef = fabs((m_camera->frame()->coordinatesOf(m_camera->pivotPoint())).z);
+			const qreal coef = fabs((m_camera->frame()->coordinatesOf(m_camera->pivotPoint())).z());
 			Vec3f trans(0.0, 0.0, -coef * delta);
 			translate(inverseTransformOf(trans));
 		}
@@ -145,7 +145,7 @@ namespace Etoile
 		/*
 		*  Now, we want the cross product of P1 and P2
 		*/
-		Vec3f a = p2.cross3(p1);   /* Axis of rotation */
+		Vec3f a = p2.cross(p1);   /* Axis of rotation */
 
 		/*
 		*  Figure out how much to rotate around that axis.

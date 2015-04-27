@@ -127,7 +127,7 @@ namespace Etoile
 		if (direction.norm() < 1E-10)
 			return;
 
-		Vec3f xAxis = direction.cross3(upVector);
+		Vec3f xAxis = direction.cross(upVector);
 		if (xAxis.norm() < 1E-10)
 		{
 			// target is aligned with upVector, this means a rotation around X axis
@@ -136,7 +136,7 @@ namespace Etoile
 		}
 
 		Quaternionf q;
-		q.setFromRotatedBasis(xAxis, xAxis.cross3(direction), -direction);
+		q.setFromRotatedBasis(xAxis, xAxis.cross(direction), -direction);
 		m_frame->setOrientation(q);
 	}
 
@@ -185,6 +185,24 @@ namespace Etoile
 		m_modelviewMatrix(1, 3) = -t[1];
 		m_modelviewMatrix(2, 3) = -t[2];
 		m_modelviewMatrix(3, 3) = 1.0;
+	}
+
+	void Camera::getGLModelViewMatrixf(float* matrix)
+	{
+		for (unsigned int i = 0; i < 4; ++i){
+			for (unsigned int j = 0; j < 4; ++j){
+				matrix[i * 4 + j] = m_modelviewMatrix(j, i);
+			}
+		}
+	}
+
+	void Camera::getGLProjectionMatrixf(float* matrix)
+	{
+		for (unsigned int i = 0; i < 4; ++i){
+			for (unsigned int j = 0; j < 4; ++j){
+				matrix[i * 4 + j] = m_projectionMatrix(j, i);
+			}
+		}
 	}
 
 	void Camera::updateMatrix(){
